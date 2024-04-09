@@ -2,28 +2,38 @@ import yaml
 from sqlalchemy import create_engine
 import pandas as pd
 
-def load_credentials(credentials):
-    with open(credentials, 'r') as file:
-        credentials = yaml.safe_load(file)
-    return credentials
-
 class RDSDatabaseConnector:
-    def __init__(self, credentials):
-        self.host = credentials['RDS_HOST']
-        self.port = credentials['RDS_PORT']
-        self.database = credentials['RDS_DATABASE']
-        self.user = credentials['RDS_USER']
-        self.password = credentials['RDS_PASSWORD']
-        self.engine = self.create_engine()
+    def __init__(self, credentials_file_path):
+        self._credentials = self._load_credentials(credentials_file_path)
+        self._engine = self._create_database_engine()
 
-    def create_engine(self):
-        engine = create_engine(f'postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}')
-        return engine
+    def _load_credentials(self, credentials_file_path):
+        try:
+            with open(credentials_file_path, 'r') as file:
+                credentials = yaml.safe_load(file)
+            return credentials
+        except Exception as e:
+            print(f"Error loading credentials from {credentials_file_path}: {e}")
+            return None
+
+    def _create_database_engine(self):
+        if self._credentials:
+            host = self._credentials.get('RDS_HOST')
+            port = self._credentials.get('RDS_PORT')
+            database = self._credentials.get('RDS_DATABASE')
+            user = self._credentials.get('RDS_USER')
+            password = self._credentials.get('RDS_PASSWORD')
+            return create_engine(f'postgresql://{user}:{password}@{host}:{port}/{database}')
+        else:
+            return None
 
     def extract_data_to_dataframe(self, table_name):
-        query = f'SELECT * FROM {table_name}'
-        df = pd.read_sql_query(query, self.engine)
-        return df
+        if self._engine:
+            query = f'SELECT * FROM {table_name}'
+            df = pd.read_sql_query(query, self._engine)
+            return df
+        else:
+            return None
 
     def save_to_csv(self, df, file_path):
         df.to_csv(file_path, index=False)
@@ -32,20 +42,13 @@ class RDSDatabaseConnector:
         df = pd.read_csv(file_path)
         return df
 
-# Load credentials from credentials.yaml
-credentials = load_credentials('credentials.yaml')
-
-# Create RDSDatabaseConnector instance
-connector = RDSDatabaseConnector(credentials)
-
-# Extract data from the 'customer_activity' table
-data = connector.extract_data_to_dataframe('customer_activity')
-
-# Save data to a CSV file
-connector.save_to_csv(data, 'customer_activity.csv')
-
-# Load data from the CSV file into a DataFrame
-loaded_data = connector.load_from_csv('customer_activity.csv')
-
-# Print the loaded data
-print(loaded_data.head())
+if __name__ == "__main__":
+    credentials_file_path = 'credentials.yaml'
+    connector = RDSDatabaseConnector(credentials_file_path)
+    data = connector.extract_data_to_dataframe('customer_activity')
+    if data is not None:
+        connector.save_to_csv(data, 'customer_activity.csv')
+        loaded_data = connector.load_from_csv('customer_activity.csv')
+        print(loaded_data.head())
+    else:
+        print("Data extraction failed. Please check the credentials.")
