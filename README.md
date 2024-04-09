@@ -43,7 +43,7 @@ from RDSDatabaseConnector import RDSDatabaseConnector
    ```
 
 ### File Structure
-├── README.md
-├── db_utils.py
-├── credentials.yaml
-└── requirements.txt
+├── README.md.
+├── db_utils.py.
+├── credentials.yaml.
+└── requirements.txt.
