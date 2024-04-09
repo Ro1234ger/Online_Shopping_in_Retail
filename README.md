@@ -40,6 +40,7 @@ from RDSDatabaseConnector import RDSDatabaseConnector
 
    # Print the loaded data to check
    print(loaded_data.head())
+   ```
 
 ### File Structure
 ├── README.md
