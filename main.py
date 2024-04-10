@@ -46,8 +46,8 @@ if __name__ == "__main__":
     print("Percentage of missing values in each column:")
     print(missing_percentage)
 
-    # Drop columns with missing values exceeding a threshold (e.g., 20%)
-    transformed_df = transformer.drop_columns_with_missing_values(threshold=1)
+    # Drop columns with missing values exceeding a threshold
+    transformed_df = transformer.drop_rows_with_high_null_proportion(threshold=0.01)
     print("\nDataFrame after dropping columns with missing values exceeding threshold:")
     print(transformed_df.head())
 
