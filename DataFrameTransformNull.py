@@ -1,6 +1,5 @@
-import pandas as pd
 
-class DataFrameTransform:
+class DataFrameTransformNull:
     def __init__(self, df):
         self.df = df
 

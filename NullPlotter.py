@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-class Plotter:
+class NullPlotter:
     def __init__(self, df):
         self.df = df
 

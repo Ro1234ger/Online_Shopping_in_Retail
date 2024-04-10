@@ -1,7 +1,7 @@
 from RDSDatabaseConnector import RDSDatabaseConnector
-from DataFrameTransform import DataFrameTransform
+from DataFrameTransformNull import DataFrameTransformNull
 from DataFrameInfo import DataFrameInfo
-from Plotter import Plotter
+from NullPlotter import NullPlotter
 
 if __name__ == "__main__":
     credentials_file_path = 'credentials.yaml'
@@ -38,8 +38,8 @@ if __name__ == "__main__":
     print("\nValue Counts with Percentages:")
     print(df_info.generate_value_counts())
 
-    # Create an instance of DataFrameTransform
-    transformer = DataFrameTransform(loaded_data)
+    # Create an instance of DataFrameTransform for Null
+    transformer = DataFrameTransformNull(loaded_data)
 
     # Determine the percentage of missing values in each column
     missing_percentage = transformer.missing_values_percentage()
@@ -49,10 +49,10 @@ if __name__ == "__main__":
     # Drop columns with missing values exceeding a threshold
     transformed_df = transformer.drop_rows_with_high_null_proportion(threshold=0.01)
     print("\nDataFrame after dropping columns with missing values exceeding threshold:")
-    print(transformed_df.head())
+    print(transformed_df)
 
     # Create an instance of Plotter
-    plotter = Plotter(transformed_df)
+    plotter = NullPlotter(transformed_df)
 
     # Visualize the removal of missing values
     plotter.visualize_removal_of_values(loaded_data, transformed_df)
