@@ -2,6 +2,7 @@ from RDSDatabaseConnector import RDSDatabaseConnector
 from DataFrameTransformNull import DataFrameTransformNull
 from DataFrameInfo import DataFrameInfo
 from NullPlotter import NullPlotter
+from DataFrameTransformSkew import DataFrameTransformSkew
 
 if __name__ == "__main__":
     credentials_file_path = 'credentials.yaml'
@@ -56,3 +57,17 @@ if __name__ == "__main__":
 
     # Visualize the removal of missing values
     plotter.visualize_removal_of_values(loaded_data, transformed_df)
+
+    #******************************************************************************************
+    # Skew analysis
+    numeric_columns = transformed_df.columns[:9]  # Selecting the first 9 numeric columns
+
+    # Step 1: Identify skewed columns
+    transformer = DataFrameTransformSkew(transformed_df)
+    transformer.identify_skewed_columns(threshold=0.5)
+    transformer.log_transform()
+
+    # Step 2: Visualize the skewness after transformation
+    transformer.visualize_skew()
+
+
