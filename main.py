@@ -51,7 +51,8 @@ if __name__ == "__main__":
     # Drop columns with missing values exceeding a threshold
     transformed_df = transformer.drop_rows_with_high_null_proportion(threshold=0.01)
     print("\nDataFrame after dropping columns with missing values exceeding threshold:")
-    print(transformed_df)
+    transformed_df.to_csv("drop_null_data.csv", index=False)
+    print("Transformed data saved to 'transformed_data.csv'.")
 
     # Create an instance of Plotter
     plotter = NullPlotter(transformed_df)
