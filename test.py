@@ -21,18 +21,17 @@ if __name__ == "__main__":
     print("\nDataFrame after dropping columns with missing values exceeding threshold:")
 
     # Step 1: Identify skewed columns
-    transformer = DataFrameTransformSkew(transformed_df)
-    skewed_columns = transformer.identify_skewed_columns(threshold=0.5)
-    for column in skewed_columns:
-        transformed_df = transformer.log_transform(transformed_df, column)
+    transformer_skew = DataFrameTransformSkew(transformed_df)
+    transformer_skew.identify_skewed_columns(threshold=0.5)
+    transformer_skew.log_transform()
 
     # Step 2: Visualize the skewness after transformation
-    # transformer.visualize_skew()
+    transformer_skew.visualize_skew()
 
-    # Step 3: Visulaise the correlation matrix
+    # Step 4: Visualize the correlation matrix
     correlation_manager = CorrelationManager(transformed_df)
     correlation_manager.visualize_correlation_matrix()
     
-    # Step 4: Drop highly correlated columns
+    # Step 5: Drop highly correlated columns
     df_after_dropping, dropped_columns = correlation_manager.drop_highly_correlated_columns(threshold=0.7)
     print("Highly correlated columns removed:", dropped_columns)
