@@ -44,6 +44,7 @@ from RDSDatabaseConnector import RDSDatabaseConnector
 
 ### File Structure
 1. README.md
-2. db_utils.py
-3. credentials.yaml
-4. requirements.txt
+2. main.py
+3. data_analysis.py
+4. customer_activity.csv
+5. other class files
