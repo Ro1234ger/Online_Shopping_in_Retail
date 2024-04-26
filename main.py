@@ -60,7 +60,6 @@ if __name__ == "__main__":
 
     #******************************************************************************************
     # Skew analysis
-    numeric_columns = transformed_df.columns[:9]  # Selecting the first 9 numeric columns
 
     # Step 1: Identify skewed columns
     transformer = DataFrameTransformSkew(transformed_df)
